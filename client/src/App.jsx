@@ -8,34 +8,32 @@ function App() {
   const [uploadspeed, setUploadspeed] = useState();
   const [ping,setping] = useState();
 
+  const API_URL = import.meta.env.VITE_API_URL;
+
   const handleclick = async () => {
-    
     console.log('Button clicked!');
 
     const pingstart = performance.now();
-    await fetch('https://speed-backend-778g.onrender.com/ping');
+    await fetch(`${API_URL}/ping`);
     const pingend = performance.now();
-    setping((pingend-pingstart).toFixed(2));
-
+    setping((pingend - pingstart).toFixed(2));
 
     const downloadstart = performance.now();
-    const res = await fetch('https://speed-backend-778g.onrender.com/download')
+    const res = await fetch(`${API_URL}/download`);
     const blob = await res.blob();
     const downloadend = performance.now();
-    const download = ((blob.size*8)/((downloadend-downloadstart)/1000)/(1024*1024)).toFixed(2);
+    const download = ((blob.size * 8) / ((downloadend - downloadstart) / 1000) / (1024 * 1024)).toFixed(2);
     setdownloadspeed(download);
 
-    const uplaoddata = new Uint8Array(20*1024*1024);
+    const uplaoddata = new Uint8Array(20 * 1024 * 1024);
     const uploadstart = performance.now();
-    await fetch('https://speed-backend-778g.onrender.com/upload',{
-      method:'POST',
+    await fetch(`${API_URL}/upload`, {
+      method: 'POST',
       body: uplaoddata
-    })
+    });
     const uploadend = performance.now();
-    const upload = ((uplaoddata.length * 8)/((uploadend-uploadstart)/1000)/(1024*1024)).toFixed(2);
+    const upload = ((uplaoddata.length * 8) / ((uploadend - uploadstart) / 1000) / (1024 * 1024)).toFixed(2);
     setUploadspeed(upload);
-
-
   }
 
   return (
