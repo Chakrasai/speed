@@ -63,27 +63,57 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-300 flex flex-col justify-center items-center">
-      <h1 className="text-3xl font-bold mb-6">🌐 Network Speed Checker</h1>
+    <div className="min-h-screen bg-gray-300 flex flex-col justify-center items-center px-4">
+      <h1 className="text-3xl font-bold mb-6 text-center">🌐 NetSpeed</h1>
 
       <button
         onClick={handleclick}
         disabled={isTesting}
         className={`mb-10 px-6 py-3 rounded text-white font-semibold transition ${
           isTesting ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-        }`}
+        } w-full max-w-xs`}
       >
         {isTesting ? 'Testing...' : 'Check Speed'}
       </button>
 
-      <div className="flex gap-10">
-        {speedometer(ping, 'Ping (ms)', '#facc15')}
-        {speedometer(downloadspeed, 'Download (Mbps)', '#10b981')}
-        {speedometer(uploadspeed, 'Upload (Mbps)', '#3b82f6')}
+      <div className="flex flex-col sm:flex-row gap-6 sm:gap-10 items-center w-full justify-center">
+        <div className="relative flex flex-col items-center w-32">
+          {isTesting && ping == null && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 rounded">
+              <svg className="animate-spin h-8 w-8 text-yellow-400 border-10" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+            </div>
+          )}
+          {speedometer(ping, 'Ping (ms)', '#facc15')}
+        </div>
+        <div className="relative flex flex-col items-center w-32">
+          {isTesting && downloadspeed == null && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 rounded">
+              <svg className="animate-spin h-8 w-8 text-green-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+            </div>
+          )}
+          {speedometer(downloadspeed, 'Download (Mbps)', '#10b981')}
+        </div>
+        <div className="relative flex flex-col items-center w-32">
+          {isTesting && uploadspeed == null && (
+            <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-60 rounded">
+              <svg className="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"/>
+              </svg>
+            </div>
+          )}
+          {speedometer(uploadspeed, 'Upload (Mbps)', '#3b82f6')}
+        </div>
       </div>
 
       {downloadspeed && uploadspeed && ping && (
-        <p className="mt-8 text-gray-600">✅ Test Complete</p>
+        <p className="mt-8 text-gray-600 text-center">✅ Test Complete</p>
       )}
     </div>
   );
