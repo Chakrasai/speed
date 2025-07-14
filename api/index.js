@@ -12,10 +12,21 @@ app.use(cors(
         ],
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true,
+        // Add additional headers to help with connection stability
+        allowedHeaders: ['Content-Type', 'Authorization', 'Connection'],
+        exposedHeaders: ['Content-Length', 'Content-Type']
     }
 ));
 
 app.use(express.raw({ limit: '100mb', type: '*/*' }));
+
+// Add connection management middleware
+app.use((req, res, next) => {
+    // Set keep-alive headers to help with connection stability
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Keep-Alive', 'timeout=30, max=1000');
+    next();
+});
 
 
 app.get('/ping',(req,res)=>{
@@ -32,7 +43,24 @@ app.get('/download',(req,res)=>{
 
 //upload test 
 app.post('/upload',(req,res)=>{
-    res.send("upload-received");
+    try {
+        // Set appropriate headers for upload response
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'no-cache');
+        
+        // Log the upload size for debugging
+        const uploadSize = req.body ? req.body.length : 0;
+        console.log(`Upload received: ${uploadSize} bytes`);
+        
+        res.status(200).json({ 
+            message: "upload-received", 
+            size: uploadSize,
+            timestamp: new Date().toISOString()
+        });
+    } catch (error) {
+        console.error('Upload error:', error);
+        res.status(500).json({ error: 'Upload failed' });
+    }
 })
 
 
