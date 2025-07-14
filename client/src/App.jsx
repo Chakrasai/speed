@@ -11,7 +11,6 @@ function App() {
   const [isTesting, setIsTesting] = useState(false);
 
 
-  const API_URL = import.meta.env.VITE_API_URL;
 
 
   const handleclick = async () => {
@@ -23,12 +22,12 @@ function App() {
     console.log('Button clicked!');
 
     const pingstart = performance.now();
-    await fetch(`${API_URL}/ping`);
+    await fetch(`${import.meta.env.VITE_API_URL}/ping`);
     const pingend = performance.now();
     setping(parseFloat((pingend - pingstart).toFixed(2)));
 
     const downloadstart = performance.now();
-    const res = await fetch(`${API_URL}/download`);
+    const res = await fetch(`${import.meta.env.VITE_API_URL}/download`);
     const blob = await res.blob();
     const downloadend = performance.now();
     const download = ((blob.size * 8) / ((downloadend - downloadstart) / 1000) / (1024 * 1024)).toFixed(2);
@@ -36,7 +35,7 @@ function App() {
 
     const uplaoddata = new Uint8Array(20 * 1024 * 1024);
     const uploadstart = performance.now();
-    await fetch(`${API_URL}/upload`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/upload`, {
       method: 'POST',
       body: uplaoddata
     });
@@ -64,7 +63,7 @@ function App() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-800 flex flex-col justify-center items-center">
+    <div className="min-h-screen bg-gray-300 flex flex-col justify-center items-center">
       <h1 className="text-3xl font-bold mb-6">🌐 Network Speed Checker</h1>
 
       <button
