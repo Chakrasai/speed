@@ -1,9 +1,11 @@
 const express = require('express');
 const cors = require('cors');
+require('dotenv').config();
+
 const app = express();
 
 app.use(cors({
-    origin: 'https://speed-one-sooty.vercel.app', 
+    origin: process.env.CLIENT_URL, 
     methods: ['GET', 'POST'], 
 }));
 app.use(express.raw({ limit: '100mb', type: '*/*' }));
